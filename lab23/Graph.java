@@ -1,9 +1,4 @@
-import java.util.LinkedList;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Iterator;
-import java.util.Stack;
-import java.util.HashSet;
+import java.util.*;
 
 public class Graph implements Iterable<Integer> {
 
@@ -68,6 +63,23 @@ public class Graph implements Iterable<Integer> {
         return new TopologicalIterator();
     }
 
+        /*
+        Stack<Vertex> fringe = new Stack<>();
+        HashSet<Vertex> visited = new HashSet<>();
+        fringe.push(startVertex);
+
+        while (!fringe.isEmpty()) {
+            Vertex v = fringe.pop();
+            if (!visited.contains(v) && !fringe.contains(v)) {
+                process(v);
+                for (Vertex neighbor: v.neighbors) {
+                    fringe.push(neighbor);
+                }
+                visited.add(v);
+        }
+    }
+         */
+
     /* A class that iterates through the vertices of this graph, starting with
        vertex START. If the iteration from START has no path from START to some
        vertex v, then the iteration will not include v. */
@@ -77,17 +89,24 @@ public class Graph implements Iterable<Integer> {
         private HashSet<Integer> visited;
 
         DFSIterator(int start) {
-            // TODO: YOUR CODE HERE
+            fringe = new Stack<Integer>();
+            visited = new HashSet<Integer>();
+            fringe.push(start);
+
+            while (!fringe.isEmpty()) {
+                Integer v = fringe.pop();
+                if ()
+            }
         }
 
         public boolean hasNext() {
-            // TODO: YOUR CODE HERE
-            return false;
+            return this.next() != null;
         }
 
         public Integer next() {
-            // TODO: YOUR CODE HERE
-            return null;
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
         }
 
         public void remove() {

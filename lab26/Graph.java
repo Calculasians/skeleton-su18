@@ -129,9 +129,67 @@ public class Graph {
         allEdges.add(e1);
     }
 
-    public Graph prims(int start) {
-        // TODO: YOUR CODE HERE
+    public Graph prims(int start) { //WARNING: CONVOLUTED
+        HashMap<Integer, Integer> fringe = new HashMap<>();
+        Set<Integer> alreadySeenVertices = new HashSet<>();
+        //add all vertices into the fringe
+        for (int i : this.getAllVertices()) {
+            fringe.put(i, Integer.MAX_VALUE);
+        }
+
+        int smallestEdgeWeightDestination = start;
+        while (!fringe.isEmpty()) {
+            fringe.remove(smallestEdgeWeightDestination);
+            alreadySeenVertices.add(smallestEdgeWeightDestination);
+            System.out.println(fringe);
+
+            //initializing some important values
+            int smallestEdgeWeight = Integer.MAX_VALUE;
+            Edge smallestEdgeWeightEdge = null;
+
+            Set<Edge> startsEdges = new HashSet<>(); //all the edges from start
+            //System.out.println(startsEdges);
+            for (Edge e : edges.get(smallestEdgeWeightDestination)) {
+                //if the already seen vertices contains a destination vertex of the smallest current vertex
+                if (!alreadySeenVertices.contains(e.getDest())) {
+                    startsEdges.add(e);
+                }
+            }
+            System.out.println(startsEdges);
+
+            Edge corrEdge = null;
+
+            for (int i : getNeighbors(smallestEdgeWeightDestination)) { //look through the neighbors of start
+                if (!alreadySeenVertices.contains(i)) {
+
+                    for (Edge e : startsEdges) {
+                        if (e.getDest() == i) {
+                            corrEdge = e;
+                        }
+                        //constantly find the smallest edge weight from the neighboring edges
+                        if (e.getWeight() < smallestEdgeWeight) {
+                            smallestEdgeWeight = e.getWeight();
+                            smallestEdgeWeightEdge = e;
+                        }
+                    }
+                    if (corrEdge.getWeight() < fringe.get(i)) {
+                        fringe.put(i, corrEdge.getWeight());
+                    }
+                }
+            }
+
+            //remove the lowest weight edge from the fringe (relax the edge)
+            if (smallestEdgeWeightEdge != null) {
+                smallestEdgeWeightDestination = smallestEdgeWeightEdge.getDest();
+            } else {
+                break;
+            }
+            //fringe.remove(smallestEdgeWeightDestination);
+            System.out.println(fringe);
+
+        }
         return null;
+
     }
 
     public Graph kruskals() {
@@ -180,5 +238,10 @@ public class Graph {
             System.exit(1);
             return null;
         }
+    }
+
+    public static void main(String[] args) {
+        Graph g1 = loadFromText("inputs/graphTestLecture.in");
+        g1.prims(0);
     }
 }
