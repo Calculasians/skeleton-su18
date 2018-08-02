@@ -1,8 +1,8 @@
-
-/* A doubly-linked list of integers supporting various sorting algorithms. */
+/* A doubly-linked list supporting various sorting algorithms. */
 public class DLList<T extends Comparable<T>> {
 
     private class Node {
+
         T item;
         Node prev;
         Node next;
@@ -24,7 +24,7 @@ public class DLList<T extends Comparable<T>> {
     /* The number of items in this DLList. */
     int size;
 
-    /* Constructs an empty DLList. */
+    /* Creates an empty DLList. */
     public DLList() {
         sentinel = new Node(null, null, null);
         sentinel.next = sentinel;
@@ -50,7 +50,7 @@ public class DLList<T extends Comparable<T>> {
         return size == 0;
     }
 
-    /* Adds a new node with item ITEM to the front of this DLList. */
+    /* Adds a new Node with item ITEM to the front of this DLList. */
     public void addFirst(T item) {
         Node newNode = new Node(item, sentinel, sentinel.next);
         sentinel.next.prev = newNode;
@@ -58,7 +58,7 @@ public class DLList<T extends Comparable<T>> {
         size += 1;
     }
 
-    /* Adds a new node with item ITEM to the end of this DLList. */
+    /* Adds a new Node with item ITEM to the end of this DLList. */
     public void addLast(T item) {
         Node newNode = new Node(item, sentinel.prev, sentinel);
         sentinel.prev.next = newNode;
@@ -77,15 +77,16 @@ public class DLList<T extends Comparable<T>> {
 
     @Override
     public String toString() {
-        String s = "";
+        StringBuilder s = new StringBuilder();
         for (Node ptr = sentinel.next; ptr != sentinel; ptr = ptr.next) {
-            s = s + ptr.item + " ";
+            s.append(ptr.item.toString());
+            s.append(" ");
         }
-        return s;
+        return s.toString();
     }
 
-    /* Returns the result of sorting the values in this DLList using insertion
-       sort. Does not modify this DLList. */
+    /* Returns a copy of this DLList sorted using insertion sort. Does not
+       modify the original DLList. */
     public DLList<T> insertionSort() {
         DLList<T> toReturn = new DLList<>();
         for (Node ptr = sentinel.next; ptr != sentinel; ptr = ptr.next) {
@@ -95,8 +96,8 @@ public class DLList<T extends Comparable<T>> {
         return toReturn;
     }
 
-    /* Inserts the item of Node N into this DLList such that the values of this
-       DLList are in increasing order. */
+    /* Inserts ITEM into this DLList such that the values of this DLList are in
+       increasing order. */
     private void insertionSortHelper(Node n) {
         if (n.next.item != null) {
             while (n.item != null && n.item.compareTo(n.next.item) > 0) {
@@ -112,8 +113,8 @@ public class DLList<T extends Comparable<T>> {
         }
     }
 
-    /* Returns the result of sorting the values in this DLList using selection
-       sort. Does not modify this DLList. */
+    /* Returns a copy of this DLList sorted using selection sort. Does not
+       modify the original DLList. */
     public DLList<T> selectionSort() {
         DLList<T> copy = new DLList<>(this);
         DLList<T> toReturn = new DLList<>();
@@ -130,9 +131,9 @@ public class DLList<T extends Comparable<T>> {
         return toReturn;
     }
 
-    /* Returns the result of sorting the values in this DLList using merge sort.
-       Does not modify this DLList. */
-    public DLList<T> mergesort() {
+    /* Returns a copy of this DLList sorted using merge sort. Does not modify
+       the original DLList. */
+    public DLList<T> mergeSort() {
         if (size <= 1) {
             return this;
         }
@@ -155,7 +156,7 @@ public class DLList<T extends Comparable<T>> {
         }
         //System.out.println("this is the second half" + otherHalf);
 
-        return oneHalf.mergesort().merge(otherHalf.mergesort());
+        return oneHalf.mergeSort().merge(otherHalf.mergeSort());
     }
 
     /* Returns the result of merging this DLList with LST. Does not modify the
@@ -184,8 +185,8 @@ public class DLList<T extends Comparable<T>> {
         return toReturn;
     }
 
-    /* Returns the result of sorting the values in this DLList using quick sort.
-       Does not modify this DLList. */
+    /* Returns a copy of this DLList sorted using quicksort. The first element
+       is used as the pivot. Does not modify the original DLList. */
     public DLList<T> quicksort() {
         if (size <= 1) {
             return this;
@@ -222,8 +223,7 @@ public class DLList<T extends Comparable<T>> {
         return toReturn;
     }
 
-    /* Appends LST to the end of this DLList. Does modify the original
-       DLList. */
+    /* Appends LST to the end of this DLList. */
     public void append(DLList<T> lst) {
         if (lst.isEmpty()) {
             return;
@@ -257,13 +257,6 @@ public class DLList<T extends Comparable<T>> {
         DLList values;
         DLList sortedValues;
 
-        System.out.print("Before selection sort: ");
-        values = generateRandomIntegerDLList(10);
-        System.out.println(values);
-        sortedValues = values.selectionSort();
-        System.out.print("After selection sort: ");
-        System.out.println(sortedValues);
-
         System.out.print("Before insertion sort: ");
         values = generateRandomIntegerDLList(10);
         System.out.println(values);
@@ -271,10 +264,17 @@ public class DLList<T extends Comparable<T>> {
         System.out.print("After insertion sort: ");
         System.out.println(sortedValues);
 
+        System.out.print("Before selection sort: ");
+        values = generateRandomIntegerDLList(10);
+        System.out.println(values);
+        sortedValues = values.selectionSort();
+        System.out.print("After selection sort: ");
+        System.out.println(sortedValues);
+
         System.out.print("Before merge sort: ");
         values = generateRandomIntegerDLList(10);
         System.out.println(values);
-        sortedValues = values.mergesort();
+        sortedValues = values.mergeSort();
         System.out.print("After merge sort: ");
         System.out.println(sortedValues);
 
